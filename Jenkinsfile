@@ -84,7 +84,7 @@ pipeline {
           steps{
             withAWS(region:'eu-central-1',credentials:'aws-user') {
             sh '/usr/local/bin/aws eks update-kubeconfig --name Devop-Capstone-Project-Todoapp'
-            sh "kubctl config use-context Devop-Capstone-Project-Todoapp"
+            sh "kubectl config use-context Devop-Capstone-Project-Todoapp"
             sh "kubectl apply -f k8s/k8sDeployment.yaml"
             sh "kubectl apply -f k8s/k8sService.yaml"
           }}
