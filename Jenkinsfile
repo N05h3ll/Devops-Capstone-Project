@@ -10,42 +10,42 @@ node {
 }
 pipeline {
     agent any
-    stages {
-        stage('Lint') {
-            agent {
-                dockerfile {
-                dir "Docker"
-                filename "Dockerfile.lint"
-                additionalBuildArgs "--build-arg user_id=${user_id} --build-arg group_id=${group_id} --build-arg CYPRESS_CACHE_FOLDER=~/.cache"
-             }
-            }
-            steps {
-                sh 'make install'
-                sh 'make lint'
-                sh '''
-                    echo "#*#*#*#*#*# LINTING DOCKERFILE #*#*#*#*#*#"
-                    wget -O hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
-                    chmod +x hadolint &&\
-                    ./hadolint Docker/Dockerfile.production
-                '''
-                sh 'make unit-test'
-                sh 'make e2e-test'
-            }
-        }
-        stage('Build'){
-            steps{
-                sh 'docker build -t todo-app -f Docker/Dockerfile.production .'
-            }
-        }
-        stage('Push to Dockerhub'){
-            steps{
-                withDockerRegistry(credentialsId: 'dockerCredentials', url: ''){
-                    sh 'docker tag todo-app n05h3ll/devops-capestone-todo-app'
-                    sh 'docker login'
-                    sh 'docker push n05h3ll/devops-capestone-todo-app'
-                }
-            }
-        }
+    // stages {
+    //     stage('Lint') {
+    //         agent {
+    //             dockerfile {
+    //             dir "Docker"
+    //             filename "Dockerfile.lint"
+    //             additionalBuildArgs "--build-arg user_id=${user_id} --build-arg group_id=${group_id} --build-arg CYPRESS_CACHE_FOLDER=~/.cache"
+    //          }
+    //         }
+    //         steps {
+    //             sh 'make install'
+    //             sh 'make lint'
+    //             sh '''
+    //                 echo "#*#*#*#*#*# LINTING DOCKERFILE #*#*#*#*#*#"
+    //                 wget -O hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
+    //                 chmod +x hadolint &&\
+    //                 ./hadolint Docker/Dockerfile.production
+    //             '''
+    //             sh 'make unit-test'
+    //             sh 'make e2e-test'
+    //         }
+    //     }
+    //     stage('Build'){
+    //         steps{
+    //             sh 'docker build -t todo-app -f Docker/Dockerfile.production .'
+    //         }
+    //     }
+    //     stage('Push to Dockerhub'){
+    //         steps{
+    //             withDockerRegistry(credentialsId: 'dockerCredentials', url: ''){
+    //                 sh 'docker tag todo-app n05h3ll/devops-capestone-todo-app'
+    //                 sh 'docker login'
+    //                 sh 'docker push n05h3ll/devops-capestone-todo-app'
+    //             }
+    //         }
+    //     }
         stage('Check Existing Cluster'){
           steps{
             script{
