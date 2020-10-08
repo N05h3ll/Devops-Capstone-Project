@@ -5,5 +5,8 @@ module.exports = {
         prependData: `@import "~@/assets/styles/theme.variables.scss";`
       }
     }
-  }
+  },
+  devServer: {
+    disableHostCheck: true
+}
 }
