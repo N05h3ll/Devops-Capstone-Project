@@ -1,81 +1,56 @@
+# Udacity Devops Nanodegree Capstone Project
+
+**The Todo app is forked from [dobromir-hristov/todo-app](https://github.com/dobromir-hristov/todo-app)**
+
 ## Description
 
-A simple TODO app, in the form of a Vue SPA.
+This project consists of deploying a `Todo App` into kubernetes infrastructure on AWS.
 
-## Run the project
-To start the app, run
+Project infrastructure contains the following :
 
-```bash
-yarn serve
-```
+* The todo app source coude forked from [dobromir-hristov/todo-app](https://github.com/dobromir-hristov/todo-app).
+* Makefile for the basic installation and running processes.
+* Jenkinsfile for the main pipeline used to test, build, publish and deploy the application.
+* Docker directory contians: 
+    * **Dockerfile.lint** for creating a test and linting image for the source code.
+    * **Dockerfile.production** for creating the **Production Ready** image to deploy it in kubernetes.
+* k8s directory contains: 
+    * **cluster.yaml** contains the configuration for creating kubernetes cluster using the **`eksctl`** tool.
+    * **deployment.yaml** for creating a deployment in kubernetes.
+    * **service.yaml** for creating a service for the deployment using a **load balancer**
 
-To run unit tests, run
+## Warnings
 
-```bash
-yarn test:unit
-```
+* The jenkins file have in the begining three variables defined `user_id, group_id, cluster_exists` the first two `user_id` and `group_id` are used to provide them to the docekrfile agent as build arguments in the lint stage, they are used to create a **jenkins** user and group inside the container to overcome a bug in the cypress image during the installation of the tool related to the files and directories permissions.
 
-To run the e2e tests, run
-```bash
-yarn test:e2e
-```
-You can use the `--headless` parameter, to skip the UI
+* **This step might not work on multiple nodes (master > slaves) jenkins installation, it's only guaranteed to work on single node jenkins**
 
-## Details
+* Deploying this app will create instances of the type **`t3.medium`** this is not covered by the AWS free tier, it will also create **`auto scalling groups`** and a **`load balancer`** to provide you with a valid URL to access and use the app.
 
-**Main Features:**
+## Prerequisites for running this project
+* Create an **AWS** account from here : [AWS knowledge center](https://aws.amazon.com/premiumsupport/knowledge-center/create-and-activate-aws-account/).
+* Create a Dockerhub account form here : [Signup to Dockerhub](https://hub.docker.com/signup).
+* Create an **Linux EC2** instance on AWS.
+    * Install **Docker** on the instance : [Installing Docker](https://docs.docker.com/engine/install).
+    * Install **Jenkins** on the instance : [Installing jenkins](https://www.jenkins.io/doc/book/installing/).
+    * Install **GIT** on the instance : [Installing GIT](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git).
+    * Configure **aws cli** on the instance : [Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html).
+    * Install **eksctl** tool for creating and configuring **EKS** clusters : [Installing eksctl](https://eksctl.io/introduction/#installation).
+    * Install **kubectl** tool for managing and configuring kubernetes clusters : [Installing kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
+    * Configure jenkins to use docker
+    * Install the following plugins for jenkins:
+        1. Blue Ocean
+        2. CloudBees AWS Credentials Plugin
+        3. Docker plugin
+        4. Docker Pipeline
+        5. Pipeline
+        6. Pipeline: AWS Steps
+    * Add the **AWS** and **Dockerhub** users credentials to jenkins.
+    * Change to your Dockerhub repository in the **Jenkinsfile**  in the **"Push to Dockerhub"** Stage.
 
-1. Creating new tasks
-2. Editing tasks
-3. Marking a task as complete
-4. Marking a task as not complete
-5. Deleting a task
+## Runnig the project
 
-**Extra features:**
+After you have satisfied all the needs in the **Prerequisites** section you are now ready to run the project.
 
-The App also incorporates a few extra features, that were on the "nice to have" side:
 
-1. List deleted tasks (trash bucket)
-2. Un-delete items from trash
-3. Delete items permanently from bucket
-4. Dedicated page for deleted items via Vue Router
-4. Re-order tasks via Drag n Drop
-5. Edit tasks
-6. Persist tasks between refreshes via Local Storage
-
-## Tech behind
-
-**Styling:**
-* SCSS
-* Bulma - minimal CSS Framework, stripped down to only the components I use. Mostly for buttons and inputs
-
-**Bundler:** 
-* Vue CLI 4
-
-**Quality:** 
-* ESLint Standard preset + Vue-ESLint Recommended.
-
-**Testing:**
-* Unit: Jest + Vue Test Utils
-* E2E: Cypress
-
-## TODO:
-
-From the list of requirements, I still have to:
-
- - [ ] Add a few more tests. Mostly integration, on TodoItem and RecycledTodoItem.
- - [ ] Improve JSDoc types.
-
-As the task is to create a relatively simple ToDo app, there are a few things I would improve/add on top: 
-
- - [ ] Add LocalStorage fallback for browsers that have it blocked (Safari sometimes does this).
- - [ ] Allow selecting multiple items at once
- - [ ] Add cross tab support
- - [ ] Improve design - its not the prettiest thing
- - [ ] Improve accessibility - have not focused on it at all
- - [ ] Add keyboard only navigation support
- - [ ] Categorizing and Filtering (Category, Date, Status, Content search)
- - [ ] Allow completing all visible items and vice versa. (would go well with above)
- - [ ] Integrate with an API for extended features. 
- - [ ] Could allow anonymous usage via LocalStorage and API integration for logged-in users.
- - [ ] Add offline support (PWA).
+To run the proejct all you have to do is to fork this project to your github account, go to **`Blue Ocean >> Create a new pipeline >> Github >> select your repository`** And the pipline will run automatically through the defined stages.
