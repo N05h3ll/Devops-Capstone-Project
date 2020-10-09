@@ -51,7 +51,7 @@ pipeline {
             script{
               try { 
                 withAWS(region:'eu-central-1',credentials:'aws-user') {
-                sh "/usr/local/bin/aws eks describe-cluster --name Devop-Capstone-Project-Todoapp"
+                sh "aws eks describe-cluster --name Devop-Capstone-Project-Todoapp"
                   }
               }
               catch(all){
@@ -84,7 +84,7 @@ pipeline {
           steps{
             withAWS(region:'eu-central-1',credentials:'aws-user') {
             sh """#!/bin/bash
-            export testvar=\$(/usr/local/bin/aws eks update-kubeconfig --name Devop-Capstone-Project-Todoapp 2>&1| cut -d\' \' -f 3)
+            export testvar=\$(aws eks update-kubeconfig --name Devop-Capstone-Project-Todoapp 2>&1| cut -d\' \' -f 3)
             kubectl config use-context \$testvar
             """
             
