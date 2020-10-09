@@ -83,7 +83,7 @@ pipeline {
           }
           steps{
             withAWS(region:'eu-central-1',credentials:'aws-user') {
-            sh ''' export testvar\\\\\=\$(/usr/local/bin/aws eks update-kubeconfig --name Devop-Capstone-Project-Todoapp 2>&1| cut -d" " -f 3) '''
+            sh ''' export testvar\\\\=\$(/usr/local/bin/aws eks update-kubeconfig --name Devop-Capstone-Project-Todoapp 2>&1| cut -d" " -f 3) '''
             sh "kubectl config use-context ${testvar}"
             sh "kubectl apply -f k8s/k8sDeployment.yaml"
             sh "kubectl apply -f k8s/k8sService.yaml"
