@@ -37,6 +37,8 @@ Project infrastructure contains the following :
     * Configure **aws cli** on the instance : [Configuring the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html).
     * Install **eksctl** tool for creating and configuring **EKS** clusters : [Installing eksctl](https://eksctl.io/introduction/#installation).
     * Install **kubectl** tool for managing and configuring kubernetes clusters : [Installing kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/).
+    
+    **Make sure that `aws cli` , `eksctl` , `kubectl` are installed in this path `/bin/{TOOL NAME}`**
     * Configure jenkins to use docker
     * Install the following plugins for jenkins:
         1. Blue Ocean
