@@ -85,10 +85,9 @@ pipeline {
             withAWS(region:'eu-central-1',credentials:'aws-user') {
             sh """#!/bin/bash
             export testvar=\$(/usr/local/bin/aws eks update-kubeconfig --name Devop-Capstone-Project-Todoapp 2>&1| cut -d\' \' -f 3)
+            echo \$testvar
             """
-            sh """#!/bin/bash 
-            echo \${testvar}
-            """
+            
             sh "kubectl apply -f k8s/k8sDeployment.yaml"
             sh "kubectl apply -f k8s/k8sService.yaml"
           }}
